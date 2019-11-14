@@ -31,10 +31,10 @@ const verifyToken = (token) => {
 
 const authorize = (headers) => {
   let token = headers['authorization'];
-  if (token.startsWith('Bearer ')) {
+  if (token && token.startsWith('Bearer ')) {
     token = token.slice(7);
   }
-  return auth.verifyToken(token);
+  return verifyToken(token);
 }
 
 module.exports = {

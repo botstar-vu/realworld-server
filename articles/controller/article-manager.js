@@ -2,6 +2,13 @@ const articleDB = require('../db/article-db');
 const auth = require('../../shared/auth');
 
 const create = (req, res) => {
+
+  if (!auth.authorize(req.headers)) {
+    res.status(401);
+    res.send({message: "You don't have permission to do this"});
+    return;
+  }
+
   let {title, author, time, description, content, tags } = req.body;
   articleDB.create(
     {
@@ -25,7 +32,7 @@ const create = (req, res) => {
 }
 
 const update = (req, res) => {
-
+  
 }
 
 const remove = (req, res) => {
