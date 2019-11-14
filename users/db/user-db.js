@@ -1,5 +1,4 @@
 const User = require('../model/user').User;
-const mongoose = require('mongoose');
 
 const validateAccount = (email, password, callback) => {
   User.findOne({email: email, password: password}, (error, response) => {

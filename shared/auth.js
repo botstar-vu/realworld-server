@@ -29,9 +29,16 @@ const verifyToken = (token) => {
   }
 }
 
-
+const authorize = (headers) => {
+  let token = headers['authorization'];
+  if (token.startsWith('Bearer ')) {
+    token = token.slice(7);
+  }
+  return auth.verifyToken(token);
+}
 
 module.exports = {
   getToken,
-  verifyToken
+  verifyToken,
+  authorize
 }

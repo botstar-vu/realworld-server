@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const account = require('./users/controller/account');
+const articles = require('./articles/controller/article-manager');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -17,5 +18,6 @@ mongoose.connection.once('open', () => {console.log('database connected')});
 
 app.post('/api/login', account.login);
 app.post('/api/register', account.register);
+app.post('/api/article/add', articles.create);
 
 app.listen(8000);

@@ -1,4 +1,4 @@
-const auth = require('./auth');
+const auth = require('../../shared/auth');
 const userDB = require('../db/user-db');
 
 const login = (req, res) => {
