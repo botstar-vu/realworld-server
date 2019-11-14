@@ -3,8 +3,7 @@ const auth = require('../../shared/auth');
 
 const create = (req, res) => {
   let {title, author, time, description, content, tags } = req.body;
-  articleDB.updateOrCreate(
-    null,
+  articleDB.create(
     {
       title: title,
       author: author,
@@ -13,10 +12,8 @@ const create = (req, res) => {
       content: content,
       tags: tags
     },
-    (error, response) => {
-      console.log('err', error);
-      console.log('res', response);
-      if (error || !response) {
+    (response) => {
+      if (!response) {
         res.status(500);
         res.send({message: 'Something went wrong'});
       } else {
@@ -47,8 +44,18 @@ const getByTag = (req, res) => {
   
 }
 
-const getPage = (req, res) => {
-  
+const getHomepage = (req, res) => {
+  let { page } = req.body;
+  let frame = 10;
+  articleDB.find({}, {start: page, number: frame}, (error, response) => {
+    if (error || !response) {
+      res.status(500);
+      res.send({message: 'Something went wrong with server'});
+    } else {
+      res.status(200);
+      res.send(response);
+    }
+  });
 }
 
-module.exports = { create, update, remove, getOne, getByAuthor, getByTag, getPage }
+module.exports = { create, update, remove, getOne, getByAuthor, getByTag, getHomepage }
