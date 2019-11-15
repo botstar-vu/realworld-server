@@ -40,7 +40,19 @@ const remove = (req, res) => {
 }
 
 const getOne = (req, res) => {
-  
+  let id = req.params['id'];
+  articleDB.findOne({_id: id}, (error, response) => {
+    if (error) {
+      res.status(500);
+      res.send({message: 'Something wrong with the server'});
+    } else if (response) {
+      res.status(200);
+      res.send(response);
+    } else {
+      res.status(404);
+      res.send({message: 'Cannot find this article'});
+    }
+  });
 }
 
 const getByAuthor = (req, res) => {
@@ -54,7 +66,7 @@ const getByTag = (req, res) => {
 const getHomepage = (req, res) => {
   let { page } = req.body;
   let frame = 10;
-  articleDB.find({}, {start: page, number: frame}, (error, response) => {
+  articleDB.findMany({}, {start: page, number: frame}, (error, response) => {
     if (error || !response) {
       res.status(500);
       res.send({message: 'Something went wrong with server'});

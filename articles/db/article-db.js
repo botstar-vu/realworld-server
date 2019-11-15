@@ -22,7 +22,17 @@ const update = (id, update, callback) => {
   });
 }
 
-const find = (query, range, callback) => {
+const findOne = (query, callback) => {
+  Article.findOne(query, (error, response) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback(null, response);
+    }
+  });
+}
+
+const findMany = (query, range, callback) => {
   let { start, number } = range;
   Article.find(query, (error, response) => {
     if (error) {
@@ -45,4 +55,4 @@ const remove = (id, callback) => {
   console.log('que', que);
 }
 
-module.exports = { create, update, remove, find }
+module.exports = { create, update, remove, findOne, findMany }

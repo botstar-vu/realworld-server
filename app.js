@@ -20,6 +20,7 @@ app.post('/api/login', account.login);
 app.post('/api/register', account.register);
 
 app.post('/api/article/add', articles.create);
+app.get('/api/article/load/:id', articles.getOne);
 
 app.get('/api/feed/home', articles.getHomepage);
 
