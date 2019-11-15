@@ -45,14 +45,13 @@ const findMany = (query, range, callback) => {
 
 const remove = (id, callback) => {
   let options = { useFindAndModify: false }
-  let que = Article.findByIdAndDelete(id, options, (error, response) => {
+  Article.findByIdAndDelete(id, options, (error, response) => {
     if (error) {
       callback(error);
     } else {
       callback(null, response);
     }
   });
-  console.log('que', que);
 }
 
 module.exports = { create, update, remove, findOne, findMany }

@@ -47,7 +47,6 @@ const updateProfile = (req, res) => {
 
 const getUsername = (req, res) => {
   let id = req.params['id'];
-  console.log('id', id);
   userDB.findOne({_id: id}, (error, response) => {
     if (error) {
       res.status(500);

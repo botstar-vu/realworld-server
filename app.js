@@ -25,9 +25,11 @@ app.post('/api/profile/edit', profile.updateProfile);
 app.get('/api/profile/id/:id', profile.getUsername);
 
 app.post('/api/article/add', articles.create);
+app.post('/api/article/edit', articles.update);
 app.get('/api/article/load/:id', articles.getOne);
+app.delete('/api/article/delete/:id', articles.remove);
 
 app.get('/api/feed/home', articles.getHomepage);
-app.get('/api/feed/:username', articles.getByAuthor);
+app.get('/api/feed/:userid', articles.getByAuthor);
 
 app.listen(8000);

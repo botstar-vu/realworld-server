@@ -62,7 +62,8 @@ const insert = (user, callback) => {
 
         let promise = User.create(userToInsert);
         promise.then(created_user => {
-          callback(null, {username: created_user.username, email: created_user.email});
+          console.log(created_user);
+          callback(null, created_user);
         });
       }
     }
