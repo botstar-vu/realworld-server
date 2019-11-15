@@ -27,5 +27,6 @@ app.post('/api/article/add', articles.create);
 app.get('/api/article/load/:id', articles.getOne);
 
 app.get('/api/feed/home', articles.getHomepage);
+app.get('/api/feed/:username', articles.getByAuthor);
 
 app.listen(8000);

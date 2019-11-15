@@ -56,7 +56,19 @@ const getOne = (req, res) => {
 }
 
 const getByAuthor = (req, res) => {
-  
+  let username = req.params['username'];
+  articleDB.findMany({author: username}, {start: 0, number: 10}, (error, response) => {
+    if (error) {
+      res.status(500);
+      res.send({message: 'Server error'});
+    } else if (response) {
+      res.status(200);
+      res.send(response);
+    } else {
+      res.status(400);
+      res.send({message: 'Invalid username'});
+    }
+  });
 }
 
 const getByTag = (req, res) => {
