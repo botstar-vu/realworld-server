@@ -37,7 +37,7 @@ const updateProfile = (req, res) => {
     } else if (response) {
       res.status(200);
       response.password = '';
-      res.send(response);
+      res.send({token: auth.getToken({email: response.email, username: response.username}), user: response});
     } else {
       res.status(404);
       res.send({message: 'User is invalid'});
@@ -45,4 +45,21 @@ const updateProfile = (req, res) => {
   })
 }
 
-module.exports = { getProfile, updateProfile }
+const getUsername = (req, res) => {
+  let id = req.params['id'];
+  console.log('id', id);
+  userDB.findOne({_id: id}, (error, response) => {
+    if (error) {
+      res.status(500);
+      res.send({message: 'Server error'});
+    } else if (response) {
+      res.status(200);
+      res.send({username: response.username});
+    } else {
+      res.status(404);
+      res.send({message: 'Cannot find user'});
+    }
+  });
+}
+
+module.exports = { getProfile, updateProfile, getUsername }

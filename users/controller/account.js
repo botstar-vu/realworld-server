@@ -10,6 +10,7 @@ const login = (req, res) => {
     } else if (response) {
       let token = auth.getToken({email: response.email, username: response.username});
       res.status(200);
+      console.log(response);
       res.send({token: token, user: response});
     } else {
       res.status(401);

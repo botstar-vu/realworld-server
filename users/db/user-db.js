@@ -5,8 +5,9 @@ const validateAccount = (email, password, callback) => {
     if (error) {
       callback(error);
     } else {
+      console.log('found', response);
       if (response) {
-        callback(null, { email: response.email, username: response.username });
+        callback(null, response);
       } else {
         callback(null, null);
       }
@@ -31,6 +32,16 @@ const getProfile = (username, callback) => {
       } else {
         callback(null, null);
       }
+    }
+  });
+}
+
+const findOne = (query, callback) => {
+  User.findOne(query, (error, response) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback(null, response);
     }
   });
 }
@@ -89,4 +100,4 @@ const getFavoriteArticles = (username, callback) => {
   // TODO: return arrays of article id that this user is following
 }
 
-module.exports = { validateAccount, getProfile, insert, update, getFollowingUsers, getFavoriteArticles }
+module.exports = { validateAccount, getProfile, insert, update, getFollowingUsers, getFavoriteArticles, findOne }
