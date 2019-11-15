@@ -24,7 +24,7 @@ const verifyToken = (token) => {
   try {
     return jwt.verify(token, process.env.PUBLIC_KEY, verifyOptions);
   } catch (err) {
-    console.log('error when verifying token');
+    console.log('verify token error: ', err);
     return null;
   }
 }
