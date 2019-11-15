@@ -21,7 +21,7 @@ app.post('/api/login', account.login);
 app.post('/api/register', account.register);
 
 app.get('/api/profile/:username', profile.getProfile);
-app.post('/api/profile/edit/:username', profile.updateProfile);
+app.post('/api/profile/edit', profile.updateProfile);
 
 app.post('/api/article/add', articles.create);
 app.get('/api/article/load/:id', articles.getOne);

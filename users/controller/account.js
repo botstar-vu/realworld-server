@@ -25,7 +25,7 @@ const register = (req, res) => {
     password: req.body.password
   }
   console.log(data);
-  userDB.insertUserIfNotExist(data, (error, response) => {
+  userDB.insert(data, (error, response) => {
     if (error) {
       res.status(500);
       res.send({message: 'Something went wrong'});

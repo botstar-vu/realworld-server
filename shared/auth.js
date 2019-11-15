@@ -6,7 +6,7 @@ const getToken = (payload) => {
     issuer: 'ang-server',
     subject: 'abc@angular',
     audience: 'localhost',
-    expiresIn: '30m',
+    expiresIn: '6h',
     algorithm: 'RS256'
   }
   return jwt.sign(payload, process.env.PRIVATE_KEY, signOptions);
@@ -17,7 +17,7 @@ const verifyToken = (token) => {
     issuer: 'ang-server',
     subject: 'abc@angular',
     audience: 'localhost',
-    expiresIn: '30m',
+    expiresIn: '6h',
     algorithm: ['RS256']
   }
 
