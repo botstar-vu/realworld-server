@@ -46,6 +46,7 @@ const remove = (req, res, next) => {
 
 const getOne = (req, res, next) => {
   let id = req.params.id;
+  console.log('trying to get ', id);
   articleDB.findOne({_id: id}, (error, response) => {
     if (error) {
       req.error = { code: 502}
