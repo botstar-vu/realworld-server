@@ -29,12 +29,18 @@ const verifyToken = (token) => {
   }
 }
 
-const authorize = (headers) => {
-  let token = headers['authorization'];
+const authorize = (req, res, next) => {
+  console.log('checking authorization');
+  let token = req.headers.authorization;
   if (token && token.startsWith('Bearer ')) {
     token = token.slice(7);
+    let verified = verifyToken(token)
+    if (verified) {
+      next();
+      return;
+    }
   }
-  return verifyToken(token);
+  res.status(401).json({message: 'Unauthorized'});
 }
 
 module.exports = {

@@ -1,62 +1,48 @@
 const auth = require('../../shared/auth');
 const userDB = require('../db/user-db');
 
-const getProfile = (req, res) => {
-  if (!auth.authorize(req.headers)) {
-    res.status(401);
-    res.send({message: 'You dont have permission to do this'});
-    return;
-  }
-
-  let username = req.params['username'];
+const getProfile = (req, res, next) => {
+  let username = req.params.username;
   userDB.getProfile(username, (error, response) => {
     if (error) {
-      res.status(500);
-      res.send({message: 'Server is broken'});
+      req.error = { code: 502 };
+      next();
     } else if (response) {
-      res.status(200);
-      res.send(response);
+      res.status(200).send(response);
     } else {
-      res.status(404);
-      res.send({message: 'User is not valid'});
+      req.error = { code: 404 };
+      next();
     }
   });
 }
 
-const updateProfile = (req, res) => {
-  if (!auth.authorize(req.headers)) {
-    res.status(401);
-    res.send({message: 'You dont have permission to do this'});
-    return;
-  }
+const updateProfile = (req, res, next) => {
   let profile = req.body.profile;
   userDB.update(profile, (error, response) => {
     if (error) {
-      res.status(500);
-      res.send({message: 'Something went wrong with server'});
+      req.error = { code: 502 };
+      next();
     } else if (response) {
-      res.status(200);
       response.password = '';
-      res.send({token: auth.getToken({email: response.email, username: response.username}), user: response});
+      res.status(200).send({token: auth.getToken({email: response.email, username: response.username}), user: response});
     } else {
-      res.status(404);
-      res.send({message: 'User is invalid'});
+      req.error = { code: 404 };
+      next();
     }
   })
 }
 
-const getUsername = (req, res) => {
-  let id = req.params['id'];
+const getUsername = (req, res, next) => {
+  let id = req.params.id;
   userDB.findOne({_id: id}, (error, response) => {
     if (error) {
-      res.status(500);
-      res.send({message: 'Server error'});
+      req.error = { code: 502 };
+      next();
     } else if (response) {
-      res.status(200);
-      res.send({username: response.username});
+      res.status(200).send({username: response.username});
     } else {
-      res.status(404);
-      res.send({message: 'Cannot find user'});
+      req.error = { code: 404 };
+      next();
     }
   });
 }

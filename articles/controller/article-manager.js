@@ -1,123 +1,81 @@
 const articleDB = require('../db/article-db');
 const auth = require('../../shared/auth');
 
-const create = (req, res) => {
-  if (!auth.authorize(req.headers)) {
-    res.status(401);
-    res.send({message: "You don't have permission to do this"});
-    return;
-  }
-
+const create = (req, res, next) => {
   let {title, author, time, description, content, tags } = req.body;
-  articleDB.create(
-    {
-      title: title,
-      author: author,
-      time: time,
-      description: description,
-      content: content,
-      tags: tags
-    },
-    (response) => {
+  articleDB.create({title, author, time, description, content, tags}, (response) => {
       if (!response) {
-        res.status(500);
-        res.send({message: 'Something went wrong'});
+        req.error = { code: 502}
+        next();
       } else {
-        res.status(200);
-        res.send(response);
+        res.status(201).json(response);
       }
-    }
-    );
+    });
 }
 
-const update = (req, res) => {
-  if (!auth.authorize(req.headers)) {
-    res.status(401);
-    res.send({message: "You don't have permission to do this"});
-    return;
-  }
-
+const update = (req, res, next) => {
   let {_id, title, author, time, description, content, tags } = req.body;
-  articleDB.update(
-    _id,
-    {
-      title: title,
-      time: time,
-      description: description,
-      content: content,
-      tags, tags
-    },
-    (error, response) => {
+  articleDB.update(_id, {title, time, description, content, tags}, (error, response) => {
       if (error) {
-        res.status(500);
-        res.send({message: 'Server is broken'});
+        req.error = { code: 502}
+        next();
       } else if (response) {
-        res.status(200);
-        res.send(response);
+        res.status(200).json(response);
       } else {
-        res.status(404);
-        res.send({message: 'Cannot find article'});
+        req.error = { code: 404}
+        next();
       }
     }
   )
 }
 
-const remove = (req, res) => {
-  if (!auth.authorize(req.headers)) {
-    res.status(401);
-    res.send({message: "You don't have permission to do this"});
-    return;
-  }
-
+const remove = (req, res, next) => {
   let id = req.params.id;
   articleDB.remove(id, (error, response) => {
     if (error) {
-      res.status(500);
-      res.send({message: 'error on server'});
+      req.error = { code: 502}
+      next();
     } else if (response) {
-      res.status(200);
-      res.send({message: 'success'});
+      res.status(200).send({message: 'success'});
     } else {
-      res.status(404);
-      res.send({message: 'cant find article'});
+      req.error = { code: 404}
+      next();
     }
   });
 }
 
-const getOne = (req, res) => {
-  let id = req.params['id'];
+const getOne = (req, res, next) => {
+  let id = req.params.id;
   articleDB.findOne({_id: id}, (error, response) => {
     if (error) {
-      res.status(500);
-      res.send({message: 'Something wrong with the server'});
+      req.error = { code: 502}
+      next();
     } else if (response) {
-      res.status(200);
-      res.send(response);
+      res.status(200).send(response);
     } else {
-      res.status(404);
-      res.send({message: 'Cannot find this article'});
+      req.error = { code: 404}
+      next();
     }
   });
 }
 
-const getByAuthor = (req, res) => {
-  let userID = req.params['userid'];
+const getByAuthor = (req, res, next) => {
+  let userID = req.params.userid;
   articleDB.findMany({author: userID}, {start: 0, number: 10}, (error, response) => {
     if (error) {
-      res.status(500);
-      res.send({message: 'Server error'});
+      req.error.code = 502;
+      next();
     } else if (response) {
-      res.status(200);
-      res.send(response);
+      res.status(200).send(response);
     } else {
-      res.status(400);
-      res.send({message: 'Cant find this user'});
+      req.error.code = 404;
+      next();
     }
   });
 }
 
 const getByTag = (req, res) => {
-  
+  // TODO: get a list of articles contain a specified tag
 }
 
 const getHomepage = (req, res) => {

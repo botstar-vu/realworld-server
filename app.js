@@ -4,9 +4,10 @@ const dotenv = require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-const account = require('./users/controller/account');
-const articles = require('./articles/controller/article-manager');
-const profile = require('./users/controller/profile');
+const articleRouter = require('./routes/article');
+const feedRouter = require('./routes/feed');
+const profileRouter = require('./routes/profile');
+const authRouter = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -17,19 +18,9 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTo
 mongoose.connection.on('error', () => {console.error.bind(console, 'connection error')});
 mongoose.connection.once('open', () => {console.log('database connected')});
 
-app.post('/api/login', account.login);
-app.post('/api/register', account.register);
-
-app.get('/api/profile/:username', profile.getProfile);
-app.post('/api/profile/edit', profile.updateProfile);
-app.get('/api/profile/id/:id', profile.getUsername);
-
-app.post('/api/article/add', articles.create);
-app.post('/api/article/edit', articles.update);
-app.get('/api/article/load/:id', articles.getOne);
-app.delete('/api/article/delete/:id', articles.remove);
-
-app.get('/api/feed/home', articles.getHomepage);
-app.get('/api/feed/:userid', articles.getByAuthor);
+app.use('/api/article', articleRouter);
+app.use('/api/feed', feedRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/auth', authRouter);
 
 app.listen(8000);
