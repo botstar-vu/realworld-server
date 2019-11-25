@@ -33,8 +33,8 @@ const authorize = (req, res, next) => {
   console.log('checking authorization');
   const token = req.headers.authorization;
   if (token && token.startsWith('Bearer ')) {
-    token = token.slice(7);
-    let verified = verifyToken(token)
+    const pure_token = token.slice(7);
+    const verified = verifyToken(pure_token)
     if (verified) {
       next();
       return;
