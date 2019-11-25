@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const getToken = (payload) => {
-  let signOptions = {
+  const signOptions = {
     issuer: 'ang-server',
     subject: 'abc@angular',
     audience: 'localhost',
@@ -13,7 +13,7 @@ const getToken = (payload) => {
 }
 
 const verifyToken = (token) => {
-  let verifyOptions = {
+  const verifyOptions = {
     issuer: 'ang-server',
     subject: 'abc@angular',
     audience: 'localhost',
@@ -31,7 +31,7 @@ const verifyToken = (token) => {
 
 const authorize = (req, res, next) => {
   console.log('checking authorization');
-  let token = req.headers.authorization;
+  const token = req.headers.authorization;
   if (token && token.startsWith('Bearer ')) {
     token = token.slice(7);
     let verified = verifyToken(token)

@@ -2,7 +2,7 @@ const auth = require('../../shared/auth');
 const userDB = require('../db/user-db');
 
 const login = (req, res, next) => {
-  let data = req.body;
+  const data = req.body;
   userDB.validateAccount(data.email, data.password, (error, response) => {
     if (error) {
       req.error = { code: 502 };
@@ -18,17 +18,17 @@ const login = (req, res, next) => {
 };
 
 const register = (req, res, next) => {
-  let data = {
+  const data = {
     email: req.body.email,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   }
   userDB.insert(data, (error, response) => {
     if (error) {
       req.error = { code: 502 };
       next();
     } else if (response) {
-      let token = auth.getToken({email: response.email, username: response.username});
+      const token = auth.getToken({email: response.email, username: response.username});
       res.status(200);
       res.send({token: token, user: response});
     } else {

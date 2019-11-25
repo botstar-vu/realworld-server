@@ -2,35 +2,34 @@ const articleDB = require('../db/article-db');
 const auth = require('../../shared/auth');
 
 const create = (req, res, next) => {
-  let {title, author, time, description, content, tags } = req.body;
+  const {title, author, time, description, content, tags } = req.body;
   articleDB.create({title, author, time, description, content, tags}, (response) => {
-      if (!response) {
-        req.error = { code: 502}
-        next();
-      } else {
-        res.status(201).json(response);
-      }
-    });
+    if (!response) {
+      req.error = { code: 502 }
+      next();
+    } else {
+      res.status(201).json(response);
+    }
+  });
 }
 
 const update = (req, res, next) => {
-  let {_id, title, author, time, description, content, tags } = req.body;
+  const {_id, title, author, time, description, content, tags } = req.body;
   articleDB.update(_id, {title, time, description, content, tags}, (error, response) => {
-      if (error) {
-        req.error = { code: 502}
-        next();
-      } else if (response) {
-        res.status(200).json(response);
-      } else {
-        req.error = { code: 404}
-        next();
-      }
+    if (error) {
+      req.error = { code: 502}
+      next();
+    } else if (response) {
+      res.status(200).json(response);
+    } else {
+      req.error = { code: 404}
+      next();
     }
-  )
+  });
 }
 
 const remove = (req, res, next) => {
-  let id = req.params.id;
+  const id = req.params.id;
   articleDB.remove(id, (error, response) => {
     if (error) {
       req.error = { code: 502}
@@ -45,7 +44,7 @@ const remove = (req, res, next) => {
 }
 
 const getOne = (req, res, next) => {
-  let id = req.params.id;
+  const id = req.params.id;
   console.log('trying to get ', id);
   articleDB.findOne({_id: id}, (error, response) => {
     if (error) {
@@ -61,7 +60,7 @@ const getOne = (req, res, next) => {
 }
 
 const getByAuthor = (req, res, next) => {
-  let userID = req.params.userid;
+  const userID = req.params.userid;
   articleDB.findMany({author: userID}, {start: 0, number: 10}, (error, response) => {
     if (error) {
       req.error.code = 502;
@@ -80,8 +79,8 @@ const getByTag = (req, res) => {
 }
 
 const getHomepage = (req, res) => {
-  let { page } = req.body;
-  let frame = 10;
+  const { page } = req.body;
+  const frame = 10;
   articleDB.findMany({}, {start: page, number: frame}, (error, response) => {
     if (error || !response) {
       res.status(500);

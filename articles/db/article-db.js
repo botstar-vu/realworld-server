@@ -1,7 +1,7 @@
 const Article = require('../model/article').Article;
 
 const create = (document, callback) => {
-  let promise = Article.create(document);
+  const promise = Article.create(document);
   promise.then(doc => {
     callback(doc);
     return doc;
@@ -9,8 +9,8 @@ const create = (document, callback) => {
 }
 
 const update = (id, update, callback) => {
-  let query = id? { _id: id} : {};
-  let options = { upsert: true, new: true, setDefaultOnInsert: true, useFindAndModify: false }
+  const query = id? { _id: id} : {};
+  const options = { upsert: true, new: true, setDefaultOnInsert: true, useFindAndModify: false }
 
   Article.findOneAndUpdate(query, update, options, (error, response) => {
     if (error) {
@@ -32,7 +32,7 @@ const findOne = (query, callback) => {
 }
 
 const findMany = (query, range, callback) => {
-  let { start, number } = range;
+  const { start, number } = range;
   Article.find(query, (error, response) => {
     if (error) {
       callback(error);
@@ -43,7 +43,7 @@ const findMany = (query, range, callback) => {
 }
 
 const remove = (id, callback) => {
-  let options = { useFindAndModify: false }
+  const options = { useFindAndModify: false }
   Article.findByIdAndDelete(id, options, (error, response) => {
     if (error) {
       callback(error);
