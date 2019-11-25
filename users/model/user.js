@@ -5,7 +5,7 @@ const UUID = mongoose.Types.UUID;
 
 let userSchema = new mongoose.Schema(
   {
-    _id: { type: UUID, default: uuidv4 },
+    _id: { type: String, default: uuidv4 },
     email: { type: String, index: true },
     username: { type: String, index: true },
     password: String,
