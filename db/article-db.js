@@ -1,4 +1,4 @@
-const Article = require('../model/article').Article;
+const Article = require('../models/article-model').Article;
 
 const create = (document, callback) => {
   const promise = Article.create(document);

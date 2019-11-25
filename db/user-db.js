@@ -1,4 +1,4 @@
-const User = require('../model/user').User;
+const User = require('../models/user-model').User;
 
 const validateAccount = (email, password, callback) => {
   User.findOne({email: email, password: password}, (error, response) => {

@@ -1,5 +1,5 @@
 const articleDB = require('../db/article-db');
-const auth = require('../../shared/auth');
+const auth = require('./auth');
 
 const create = (req, res, next) => {
   const {title, author, time, description, content, tags } = req.body;

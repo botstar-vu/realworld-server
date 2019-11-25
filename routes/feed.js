@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const articles = require('../articles/controller/article-manager');
+const articles = require('../controllers/article-manager');
 
 router.get('/home', articles.getHomepage);
 router.get('/:userid', articles.getByAuthor);
