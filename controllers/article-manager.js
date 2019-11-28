@@ -1,95 +1,58 @@
-const articleDB = require('../db/article-db');
+const Article = require('../models/article-model');
 const auth = require('./auth');
 
-const create = (req, res, next) => {
+const create = async (req, res, next) => {
+  console.log('start creating');
   const {title, author, time, description, content, tags } = req.body;
-  articleDB.create({title, author, time, description, content, tags}, (response) => {
-    if (!response) {
-      req.error = { code: 502 }
-      next();
-    } else {
-      res.status(201).json(response);
-    }
-  });
+  try {
+    const createdArtcle = await Article.create({title, author, time, description, content, tags});
+    res.status(200).json(createdArtcle);
+  } catch (error) {
+    console.log('create article error', error);
+    req.error = { code: 501, message: 'Cannot create article'};
+    next();
+  }
 }
 
-const update = (req, res, next) => {
-  const {_id, title, author, time, description, content, tags } = req.body;
-  articleDB.update(_id, {title, time, description, content, tags}, (error, response) => {
-    if (error) {
-      req.error = { code: 502}
-      next();
-    } else if (response) {
-      res.status(200).json(response);
-    } else {
-      req.error = { code: 404}
-      next();
-    }
-  });
+const update = async (req, res, next) => {
+  console.log('start updating');
+  const { _id, title, author, time, description, content, tags } = req.body;
+  try {
+    const update = { _title, time, description, content, tags };
+    const options = { upsert: true, new: true, setDefaultOnInsert: true, useFindAndModify: false };
+    const updatedArticle = await Article.findByIdAndUpdate(_id, update, options);
+    res.status(200).json(updatedArticle);
+  } catch (error) {
+    console.log('update article error', error);
+    req.error = { code: 501, message: 'Cannot update article'};
+    next();
+  }
 }
 
-const remove = (req, res, next) => {
-  const id = req.params.id;
-  articleDB.remove(id, (error, response) => {
-    if (error) {
-      req.error = { code: 502}
-      next();
-    } else if (response) {
-      res.status(200).send({message: 'success'});
-    } else {
-      req.error = { code: 404}
-      next();
-    }
-  });
-}
-
-const getOne = (req, res, next) => {
+const get = async (req, res, next) => {
   const id = req.params.id;
   console.log('trying to get ', id);
-  articleDB.findOne({_id: id}, (error, response) => {
-    if (error) {
-      req.error = { code: 502}
-      next();
-    } else if (response) {
-      res.status(200).send(response);
-    } else {
-      req.error = { code: 404}
-      next();
-    }
-  });
+  
+  try {
+    const article = await Article.findById(id);
+    res.status(200).json(article);
+  } catch (error) {
+    console.log('get article error', error);
+    req.error = { code: 501, message: 'Cannot get article'};
+    next();
+  }
 }
 
-const getByAuthor = (req, res, next) => {
-  const userID = req.params.userid;
-  articleDB.findMany({author: userID}, {start: 0, number: 10}, (error, response) => {
-    if (error) {
-      req.error.code = 502;
-      next();
-    } else if (response) {
-      res.status(200).send(response);
-    } else {
-      req.error.code = 404;
-      next();
-    }
-  });
+const remove = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const deletedArticle = await Article.findByIdAndDelete(id);
+    res.status(200).json(deletedArticle);
+  } catch (error) {
+    console.log('delete article error', error);
+    req.error = { code: 501, message: 'Cannot delete article'};
+    next();
+  }
 }
 
-const getByTag = (req, res) => {
-  // TODO: get a list of articles contain a specified tag
-}
-
-const getHomepage = (req, res) => {
-  const { page } = req.body;
-  const frame = 10;
-  articleDB.findMany({}, {start: page, number: frame}, (error, response) => {
-    if (error || !response) {
-      res.status(500);
-      res.send({message: 'Something went wrong with server'});
-    } else {
-      res.status(200);
-      res.send(response);
-    }
-  });
-}
-
-module.exports = { create, update, remove, getOne, getByAuthor, getByTag, getHomepage }
+module.exports = { create, update, get, remove }

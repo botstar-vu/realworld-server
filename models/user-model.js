@@ -11,10 +11,10 @@ let userSchema = new mongoose.Schema(
     password: String,
     bio: { type: String, default: ''},
     image: { type: String, default: ''},
-    article: [String],
-    favortie: [String],
-    following: [String]
+    articles: [{type: String, ref: 'article'}],
+    favorites: [{type: String, ref: 'article'}],
+    followings: [{type: String, ref: 'user'}]
   }
 );
 
-module.exports.User = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

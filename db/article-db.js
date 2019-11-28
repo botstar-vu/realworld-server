@@ -8,7 +8,7 @@ const create = (document, callback) => {
   });
 }
 
-const update = (id, update, callback) => {
+const update = async (id, update, callback) => {
   const query = id? { _id: id} : {};
   const options = { upsert: true, new: true, setDefaultOnInsert: true, useFindAndModify: false }
 
@@ -22,24 +22,26 @@ const update = (id, update, callback) => {
 }
 
 const findOne = (query, callback) => {
-  Article.findOne(query, (error, response) => {
-    if (error) {
-      callback(error);
-    } else {
-      callback(null, response);
+  Article.findOne(query).exec(
+    (error, response) => {
+      if (error) { callback(error); }
+      else { callback(null, response); }
     }
-  });
+  )
 }
 
-const findMany = (query, range, callback) => {
+const findMany = async (query, range, callback) => {
   const { start, number } = range;
-  Article.find(query, (error, response) => {
+  let homeFeed = Article.find(query, (error, response) => {
     if (error) {
-      callback(error);
+      if (callback) callback(error);
     } else {
-      callback(null, response);
+      if (callback) callback(null, response);
     }
   }).skip(start).limit(number);
+
+  homeFeed.sort({'time': -1}).p;
+  return homeFeed;
 }
 
 const remove = (id, callback) => {

@@ -6,9 +6,9 @@ const UUID = mongoose.Types.UUID;
 const articleSchema = new mongoose.Schema(
   {
     _id: { type: String, default: uuidv4, required: true },
-    title: String,
-    author: String,
-    time: Date,
+    title: { type: String, index: true },
+    author: { type: String, ref: 'User', index : true},
+    time: { type: Date, index: true },
     description: String,
     content: String,
     like: Number,
@@ -17,4 +17,4 @@ const articleSchema = new mongoose.Schema(
   }
 );
 
-module.exports.Article = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('Article', articleSchema);
