@@ -11,9 +11,9 @@ let userSchema = new mongoose.Schema(
     password: String,
     bio: { type: String, default: ''},
     image: { type: String, default: ''},
-    articles: [{type: String, ref: 'article'}],
-    favorites: [{type: String, ref: 'article'}],
-    followings: [{type: String, ref: 'user'}]
+    articles: [{type: String, ref: 'Article'}],
+    favorites: [{type: String, ref: 'Article'}],
+    followings: [{type: String, ref: 'User'}]
   }
 );
 

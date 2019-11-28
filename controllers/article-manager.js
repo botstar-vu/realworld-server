@@ -1,5 +1,4 @@
 const Article = require('../models/article-model');
-const auth = require('./auth');
 
 const create = async (req, res, next) => {
   console.log('start creating');

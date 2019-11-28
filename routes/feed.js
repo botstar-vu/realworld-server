@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const articles = require('../controllers/article-manager');
+const feed = require('../controllers/feed');
+const auth = require('../controllers/auth');
 
-// router.get('/home', articles.getHomepage);
-// router.get('/:userid', articles.getByAuthor);
+router.get('/home', feed.getHomepage);
+router.get('/:userid/posts', feed.getPersonalPosts);
+router.get('/:userid/favorite', auth.authorize, feed.getFavoritePosts);
+router.get('/:userid', auth.authorize, feed.getPersonalFeed);
 
 module.exports = router;
