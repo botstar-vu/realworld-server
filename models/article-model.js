@@ -13,7 +13,7 @@ const articleSchema = new mongoose.Schema(
     content: String,
     like: Number,
     tags: { type: [String], index: true },
-    comments: [String]
+    comments: [{type: String, ref: 'Comment' }]
   }
 );
 

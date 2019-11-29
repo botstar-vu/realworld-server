@@ -33,7 +33,7 @@ const get = async (req, res, next) => {
   console.log('trying to get ', id);
   
   try {
-    const article = await Article.findById(id);
+    const article = await Article.findById(id).populate('comments');
     res.status(200).json(article);
   } catch (error) {
     console.log('get article error', error);
